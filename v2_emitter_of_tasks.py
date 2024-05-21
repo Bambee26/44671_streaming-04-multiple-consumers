@@ -2,14 +2,19 @@
     This program sends a message to a queue on the RabbitMQ server.
     Make tasks harder/longer-running by adding dots at the end of the message.
 
-    Author: Denise Case
-    Date: January 15, 2023
+    Author: Bambee Garfield
+    Date: May 21st, 2024
 
 """
 
 import pika
 import sys
 import webbrowser
+
+# Configure logging
+from util_logger import setup_logger
+
+logger, logname = setup_logger(__file__)
 
 def offer_rabbitmq_admin_site():
     """Offer to open the RabbitMQ Admin website"""
