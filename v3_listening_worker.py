@@ -10,16 +10,22 @@
 import pika
 import sys
 import time
+import datetime
+
+# Configure Logging
+from util_logger import setup_logger
+
+logger, logname = setup_logger(__file__)
 
 # define a callback function to be called when a message is received
 def callback(ch, method, properties, body):
     """ Define behavior on getting a message."""
     # decode the binary message body to a string
-    print(f" [x] Received {body.decode()}")
+    logger.info(f" [x] Received {body.decode()} at {datetime.datetime.now()}")
     # simulate work by sleeping for the number of dots in the message
     time.sleep(body.count(b"."))
     # when done with task, tell the user
-    print(" [x] Done.")
+    logger.info(" [x] Done.")
     # acknowledge the message was received and processed 
     # (now it can be deleted from the queue)
     ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -37,11 +43,9 @@ def main(hn: str = "localhost", qn: str = "task_queue"):
 
     # except, if there's an error, do this
     except Exception as e:
-        print()
-        print("ERROR: connection to RabbitMQ server failed.")
-        print(f"Verify the server is running on host={hn}.")
-        print(f"The error says: {e}")
-        print()
+        logger.error("ERROR: connection to RabbitMQ server failed.")
+        logger.error(f"Verify the server is running on host={hn}.")
+        logger.error(f"The error says: {e}")
         sys.exit(1)
 
     try:
@@ -69,24 +73,22 @@ def main(hn: str = "localhost", qn: str = "task_queue"):
         # and do not auto-acknowledge the message (let the callback handle it)
         channel.basic_consume( queue=qn, on_message_callback=callback)
 
-        # print a message to the console for the user
-        print(" [*] Ready for work. To exit press CTRL+C")
+        # log a message to the console for the user
+        logger.info(" [*] Ready for work. To exit press CTRL+C")
 
         # start consuming messages via the communication channel
         channel.start_consuming()
 
     # except, in the event of an error OR user stops the process, do this
     except Exception as e:
-        print()
-        print("ERROR: something went wrong.")
-        print(f"The error says: {e}")
+        logger.error("ERROR: something went wrong.")
+        logger.error(f"The error says: {e}")
         sys.exit(1)
     except KeyboardInterrupt:
-        print()
-        print(" User interrupted continuous listening process.")
+        logger.error(" User interrupted continuous listening process.")
         sys.exit(0)
     finally:
-        print("\nClosing connection. Goodbye.\n")
+        logger.error("\nClosing connection. Goodbye.\n")
         connection.close()
 
 
@@ -96,4 +98,4 @@ def main(hn: str = "localhost", qn: str = "task_queue"):
 # If this is the program being run, then execute the code below
 if __name__ == "__main__":
     # call the main function with the information needed
-    main("localhost", "task_queue2")
+    main("localhost", "task_queue3")

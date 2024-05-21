@@ -10,6 +10,12 @@
 import pika
 import sys
 import webbrowser
+import csv
+
+# Configure Logging
+from util_logger import setup_logger
+
+logger, logname = setup_logger(__file__)
 
 def offer_rabbitmq_admin_site():
     """Offer to open the RabbitMQ Admin website"""
@@ -17,7 +23,7 @@ def offer_rabbitmq_admin_site():
     print()
     if ans.lower() == "y":
         webbrowser.open_new("http://localhost:15672/#/queues")
-        print()
+        logger.info("Opened RabbitMQ")
 
 def send_message(host: str, queue_name: str, message: str):
     """
@@ -44,13 +50,21 @@ def send_message(host: str, queue_name: str, message: str):
         # every message passes through an exchange
         ch.basic_publish(exchange="", routing_key=queue_name, body=message)
         # print a message to the console for the user
-        print(f" [x] Sent {message}")
+        logger.info(f" [x] Sent {message}")
     except pika.exceptions.AMQPConnectionError as e:
-        print(f"Error: Connection to RabbitMQ server failed: {e}")
+        logger.error(f"Error: Connection to RabbitMQ server failed: {e}")
         sys.exit(1)
     finally:
         # close the connection to the server
         conn.close()
+
+# Read tasks from csv and send to RabbitMQ server
+def read_and_send_tasks_from_csv(file_path: str, host: str, queue_name: str):
+    with open(file_path, newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader: 
+            message = " ".join(row)
+            send_message(host, queue_name, message)
 
 # Standard Python idiom to indicate main program entry point
 # This allows us to import this module and use its functions
@@ -59,10 +73,8 @@ def send_message(host: str, queue_name: str, message: str):
 if __name__ == "__main__":  
     # ask the user if they'd like to open the RabbitMQ Admin site
     offer_rabbitmq_admin_site()
-    # get the message from the command line
-    # if no arguments are provided, use the default message
-    # use the join method to convert the list of arguments into a string
-    # join by the space character inside the quotes
-    message = " ".join(sys.argv[1:]) or "Second task....."
-    # send the message to the queue
-    send_message("localhost","task_queue2",message)
+    file_name = 'tasks.csv'
+    host = "localhost"
+    queue_name = "task_queue3"
+    read_and_send_tasks_from_csv(file_name, host, queue_name)
+  

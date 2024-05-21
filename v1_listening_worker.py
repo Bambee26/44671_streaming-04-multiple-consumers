@@ -18,6 +18,8 @@ Terminal Reminders
 
 - Use the up arrow to get the last command executed.
 
+    Author: Bambee Garfield
+    Date: May 21st, 2024
 """
 
 import pika

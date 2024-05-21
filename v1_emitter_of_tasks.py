@@ -1,5 +1,4 @@
 """
-Ashlee Alexander 9/20
 Creates and sends a task message to the queue each execution.
 This process runs and finishes. 
 Make tasks harder/longer-running by adding dots at the end of the message.
@@ -8,7 +7,8 @@ Approach
 ---------
 Work Queues - one task producer / many workers sharing work.
 
-
+    Author: Bambee Garfield
+    Date: May 21st, 2024
 """
 
 import pika
