@@ -36,31 +36,31 @@ RabbitMQ comes with an admin panel. When you run the task emitter, reply y to op
 
 1. In two separate terminals, run v3_listening_worker.py
 
-You should see the two terminals alternating tasks: 1, 3, 5 on one and 2, 4, 6 on the other.
+You should see the two terminals alternating tasks based on the resources being used (.... takes longer than ...)
 
 Will it terminate on its own? How do you know? It will not. You know this because this is the first line you see when it starts running:  [*] Ready for work. To exit press CTRL+C. 
 
-## Ready for Work
+## Ready for Work ✔️
 
 1. Use your emitter_of_tasks to produce more task messages.
 
-## Start Another Listening Worker 
+## Start Another Listening Worker ✔️
 
 1. Use your listening_worker.py script to launch a second worker. 
 
 Follow the tutorial. 
 Add multiple tasks (e.g. First message, Second message, etc.)
-How are tasks distributed? The first three have 4 .... and alternate. Then the next two go to one because they take less time, and 6 goes back to the first.
+How are tasks distributed? The first three alternate back and forth becaues they use the same reqources with 4 .... Then the next three have three ... and they go to the worker who is available. 
 Monitor the windows with at least two workers. 
-Which worker gets which tasks?
+Which worker gets which tasks? In this scenario, one worker gets 1st, 3rd and 6th while the other gets the 2nd, 4th and 5th.
 
 
-## Reference
+## Reference ✔️
 
 - [RabbitMQ Tutorial - Work Queues](https://www.rabbitmq.com/tutorials/tutorial-two-python.html)
 
 
-## Screenshot
+## Screenshot ✔️
 
 See a running example with at least 3 concurrent process windows here:
 ![alt text](image.png)
