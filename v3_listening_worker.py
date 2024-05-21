@@ -10,7 +10,6 @@
 import pika
 import sys
 import time
-import datetime
 
 # Configure Logging
 from util_logger import setup_logger
@@ -21,7 +20,7 @@ logger, logname = setup_logger(__file__)
 def callback(ch, method, properties, body):
     """ Define behavior on getting a message."""
     # decode the binary message body to a string
-    logger.info(f" [x] Received {body.decode()} at {datetime.datetime.now()}")
+    logger.info(f" [x] Received {body.decode()}")
     # simulate work by sleeping for the number of dots in the message
     time.sleep(body.count(b"."))
     # when done with task, tell the user
