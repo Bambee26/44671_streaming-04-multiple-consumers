@@ -11,7 +11,7 @@ One process will create task messages. Multiple worker processes will share the 
 
 ## Before You Begin ✔️
 
-1. Fork this starter repo into your GitHub.
+1. Fork [this starter repo](https://github.com/denisecase/streaming-04-multiple-consumers) into your GitHub.
 1. Clone your repo down to your machine.
 1. View / Command Palette - then Python: Select Interpreter
 1. Select your conda environment. 
@@ -27,32 +27,31 @@ RabbitMQ comes with an admin panel. When you run the task emitter, reply y to op
 
 (Python makes it easy to open a web page - see the code to learn how.)
 
+## Create a Python Virtual Environment ✔️
+
+We will create a local Python virtual environment to isolate our project's third-party dependencies from other projects.
+
+1. Open a terminal window in VS Code.
+2. Use the built-in Python utility venv to create a new virtual environment named `.venv` in the current directory.
+
+python -m venv .venv
+
+In the same VS Code terminal window, activate the virtual environment.
+
+- On Windows, run: `.venv\Scripts\activate`
+
 ## Execute the Producer ✔️
 
-1. In terminal, run v3_emitter_of_tasks.py (say y to monitor RabbitMQ queues)
+1. In the VS Code terminal, run v3_emitter_of_tasks.py (say y to monitor RabbitMQ queues)
 
 
 ## Execute a Consumer / Worker ✔️
 
-1. In two separate terminals, run v3_listening_worker.py
+1. Oopen two separate terminals or command prompts. In two separate terminals, run 
+
+python v3_listening_worker.py
 
 You should see the two terminals alternating tasks based on the resources being used (.... takes longer than ...)
-
-Will it terminate on its own? How do you know? It will not. You know this because this is the first line you see when it starts running:  [*] Ready for work. To exit press CTRL+C. 
-
-## Ready for Work ✔️
-
-1. Use your emitter_of_tasks to produce more task messages.
-
-## Start Another Listening Worker ✔️
-
-1. Use your listening_worker.py script to launch a second worker. 
-
-Follow the tutorial. 
-Add multiple tasks (e.g. First message, Second message, etc.)
-How are tasks distributed? The first three alternate back and forth becaues they use the same reqources with 4 .... Then the next three have three ... and they go to the worker who is available. 
-Monitor the windows with at least two workers. 
-Which worker gets which tasks? In this scenario, one worker gets 1st, 3rd and 6th while the other gets the 2nd, 4th and 5th.
 
 
 ## Reference ✔️
